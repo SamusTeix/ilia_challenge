@@ -1,0 +1,60 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: mbstring, intl
+          coverage: xdebug
+          tools: cs2pr
+
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        with:
+          path: vendor
+          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php-
+
+      - name: Install Composer dependencies
+        run: composer install --no-interaction
+
+      - name: Run PHP CS Fixer
+        run: vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.php
+
+      - name: Cache PHPUnit results
+        uses: actions/cache@v2
+        with:
+          path: tests/_output
+          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php-
+
+      - name: Run PHPUnit tests
+        run: vendor/bin/phpunit --coverage-text
+
+      - name: Display test coverage
+        if: success()
+        run: |
+          vendor/bin/phpcoverage
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-results
+          path: tests/_output
