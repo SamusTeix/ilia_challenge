@@ -1,0 +1,14 @@
+<div class="card mb-3" style="width: 16rem;">
+	<img class="card-img-top" src="{{ item.images.small }}" alt="Imagem do {{ item.name }}">
+	<div class="card-body">
+		<h5 class="card-title">{{ item.name }}</h5>
+		<p class="card-text">ID:
+			{{ item.id }}</p>
+		<p class="card-text">Tipo(s):
+			{% for type in item.types %}
+				{{ type }}
+			{% endfor %}
+		</p>
+		<a href="/cards/{{ item.id }}" class="btn btn-primary">Ver mais detalhes</a>
+	</div>
+</div>

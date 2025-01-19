@@ -1,0 +1,155 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+	<div class="container mt-4">
+		{% for label, message in app.flashes %}
+			<div class="alert alert-{{ label }}">
+				{% for msg in message %}
+					{{ msg }}
+				{% endfor %}
+			</div>
+		{% endfor %}
+
+		<div class="row">
+			<div class="col-10">
+				<div class="card">
+					
+					<div
+						class="card-body">
+
+						<!-- Botão para expandir filtros -->
+						<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#filterContainer" aria-expanded="false" aria-controls="filterContainer">
+							Mostrar Filtros
+						</button>
+
+						<!-- Contêiner para filtros -->
+						<div class="collapse custom-bg-none" id="filterContainer">
+							<div class="card card-body mt-2 custom-bg-none">
+								{{ form_start(filterForm, {'attr': {'class': 'form-horizontal'}}) }}
+								<div class="form-row">
+									<div class="col-md-4">
+										<div class="form-group">
+											{{ form_label(filterForm.id, null, {'label_attr': {'class': 'col-form-label'}}) }}
+											{{ form_widget(filterForm.id, {'attr': {'class': 'form-control'}}) }}
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="form-group">
+											{{ form_label(filterForm.name, null, {'label_attr': {'class': 'col-form-label'}}) }}
+											{{ form_widget(filterForm.name, {'attr': {'class': 'form-control'}}) }}
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="form-group">
+											{{ form_label(filterForm.abilities, null, {'label_attr': {'class': 'col-form-label'}}) }}
+											{{ form_widget(filterForm.abilities, {'attr': {'class': 'form-control'}}) }}
+										</div>
+									</div>
+								</div>
+								<div class="form-row">
+									<div class="col-md-4">
+										<div class="form-group">
+											{{ form_label(filterForm.attacks, null, {'label_attr': {'class': 'col-form-label'}}) }}
+											{{ form_widget(filterForm.attacks, {'attr': {'class': 'form-control'}}) }}
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="form-group">
+											{{ form_label(filterForm.rarity, null, {'label_attr': {'class': 'col-form-label'}}) }}
+											{{ form_widget(filterForm.rarity, {'attr': {'class': 'form-control'}, 'placeholder': 'Selecione',}) }}
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="form-group">
+											{{ form_label(filterForm.resistances, null, {'label_attr': {'class': 'col-form-label'}}) }}
+											{{ form_widget(filterForm.resistances, {'attr': {'class': 'form-control'}}) }}
+										</div>
+									</div>
+								</div>
+								<div class="form-row">
+									<div class="col-md-4">
+										<div class="form-group">
+											{{ form_label(filterForm.types, null, {'label_attr': {'class': 'col-form-label'}}) }}
+											{{ form_widget(filterForm.types, {'attr': {'class': 'form-control'}, 'placeholder': 'Selecione',}) }}
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="form-group">
+											{{ form_label(filterForm.subtypes, null, {'label_attr': {'class': 'col-form-label'}}) }}
+											{{ form_widget(filterForm.subtypes, {'attr': {'class': 'form-control'}, 'placeholder': 'Selecione',}) }}
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="form-group">
+											{{ form_label(filterForm.supertype, null, {'label_attr': {'class': 'col-form-label'}}) }}
+											{{ form_widget(filterForm.supertype, {'attr': {'class': 'form-control'}, 'placeholder': 'Selecione',}) }}
+										</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="col-sm-offset-2 col-sm-10">
+										<button type="submit" class="btn btn-primary">Filtrar</button>
+										<a href="/" class="btn btn-secondary">Limpar Filtros</a>
+									</div>
+								</div>
+								{{ form_end(filterForm) }}
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Contêiner para seletor de número de itens por página -->
+			<div class="col-2">
+				<div class="form-group">
+					<label for="itemsPerPage" class="col-form-label">Itens Por Página</label>
+					<select id="itemsPerPage" name="itemsPerPage" class="form-control" onchange="updateItemsPerPage()">
+						<option value="20">20</option>
+						<option value="40">40</option>
+						<option value="60">60</option>
+						<option value="80">80</option>
+						<option value="100">100</option>
+					</select>
+				</div>
+			</div>
+		</div>
+
+		<section>
+			{% if totalCount > 0 %}
+				<label>{{ totalCount }}
+					itens encontrados</label>
+				<div class="row text-center">
+					{% for item in items %}
+						<div class="col-md-3">
+							{% include 'components/card.html.twig' with { 'item': item } %}
+						</div>
+					{% endfor %}
+
+				</div>
+				<div class="row-fluid text-center">
+					{% include 'components/paginator.html.twig' with { 'pagination': pagination } %}
+				</div>
+			{% else %}
+				<label>Nenhum item encontrado</label>
+			{% endif %}
+		</section>
+	</div>
+
+	<script>
+		const queryParams = new URLSearchParams(window.location.search);
+const selectPageSize = document.getElementById('itemsPerPage');
+
+selectPageSize.value = queryParams.get('pageSize') ?? 20;
+
+function updateItemsPerPage() {
+const selectedPageSize = selectPageSize.value;
+
+// Defina 'page' como 1
+queryParams.set('page', 1);
+queryParams.set('pageSize', selectedPageSize);
+
+// Redirecionar para a URL com os novos parâmetros
+window.location.href = window.location.pathname + '?' + queryParams.toString();
+}
+	</script>
+{% endblock %}

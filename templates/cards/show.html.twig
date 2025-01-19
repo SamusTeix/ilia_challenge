@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+	<div class="container mt-5">
+		<div class="row">
+			<div class="col-6 d-flex justify-content-center">
+				<img src="{{ item.images.large }}" class="img-fluid" alt="Imagem do {{ item.name }}">
+			</div>
+			<div class="col-6 mt-3">
+				<h1>{{ item.name }}</h1>
+				<p>ID:
+					{{ item.id }}</p>
+				<p>Tipo(s):
+					{% for type in item.types %}
+						{{ type }}
+					{% endfor %}
+				</p>
+				<p>Resistência(s):
+					{% for resistance in item.resistances %}
+						{{ resistance.type }}
+						{% if not loop.last %},
+						{% endif %}
+					{% endfor %}
+				</p>
+				<p>Fraqueza(s):
+					{% for weakness in item.weaknesses %}
+						{{ weakness.type }}
+						{% if not loop.last %},
+						{% endif %}
+					{% endfor %}
+				</p>
+				<p>Ataques:</p>
+				<ul>
+					{% for attack in item.attacks %}
+						<li>{{ attack.name }}</li>
+					{% endfor %}
+				</ul>
+				<a href="/" class="btn btn-secondary">Voltar</a>
+			</div>
+		</div>
+	</div>
+{% endblock %}

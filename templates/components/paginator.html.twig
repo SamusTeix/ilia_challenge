@@ -1,0 +1,11 @@
+<div class="pagination-container text-center">
+    {% for item in pagination %}
+        {% if item.disabled is defined and item.disabled %}
+            <span class="btn btn-secondary disabled">{{ item.text }}</span>
+        {% elseif item.active is defined and item.active %}
+            <span class="btn btn-secondary active">{{ item.text }}</span>
+        {% else %}
+            <a href="{{ item.url }}" class="btn btn-secondary">{{ item.text }}</a>
+        {% endif %}
+    {% endfor %}
+</div>
