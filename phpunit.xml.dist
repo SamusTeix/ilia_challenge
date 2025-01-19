@@ -19,15 +19,4 @@
 	</testsuites>
 	<extensions>
 	</extensions>
-	<logging>
-		<log type="coverage-html" target="build/coverage" />
-		<log type="coverage-xml" target="build/coverage/coverage.xml" />
-	</logging>
-	<filter>
-		<whitelist>
-			<directory suffix=".php">
-				./src
-			</directory>
-		</whitelist>
-	</filter>
 </phpunit>
