@@ -33,9 +33,6 @@ jobs:
       - name: Install Composer dependencies
         run: composer install --no-interaction
 
-      - name: Run PHP CS Fixer
-        run: vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.php
-
       - name: Cache PHPUnit results
         uses: actions/cache@v2
         with:
