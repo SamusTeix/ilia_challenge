@@ -20,14 +20,13 @@
 	<extensions>
 	</extensions>
 	<logging>
-		<log type="coverage-html" target="build/coverage" lowUpperBound="50" highLowerBound="80" />
+		<log type="coverage-html" target="build/coverage" />
 		<log type="coverage-xml" target="build/coverage/coverage.xml" />
-		<log type="junit" target="build/logs/junit.xml" />
 	</logging>
 	<filter>
 		<whitelist>
 			<directory suffix=".php">
-				src
+				./src
 			</directory>
 		</whitelist>
 	</filter>
