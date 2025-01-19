@@ -11,41 +11,50 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-      
-    - name: Set up PHP
-      uses: shivammathur/setup-php@v2
-      with:
-        php-version: '8.0'
-        extensions: mbstring, intl
-        coverage: xdebug
-        tools: cs2pr
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Install Composer dependencies
-      run: composer install
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: mbstring, intl
+          coverage: xdebug
+          tools: cs2pr
 
-    - name: Run PHP CS Fixer
-      run: |
-        vendor/bin/php-cs-fixer fix --dry-run --diff
-      continue-on-error: true
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        with:
+          path: vendor
+          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php-
 
-    - name: Annotate PHP CS Fixer output
-      if: failure()
-      run: |
-        vendor/bin/cs2pr
+      - name: Install Composer dependencies
+        run: composer install --no-interaction
 
-    - name: Run PHPUnit tests
-      run: vendor/bin/phpunit
-      
-    - name: Display test coverage
-      if: success()
-      run: |
-        vendor/bin/phpcoverage
+      - name: Run PHP CS Fixer
+        run: vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.php
 
-    - name: Upload test results
-      if: always()
-      uses: actions/upload-artifact@v2
-      with:
-        name: test-results
-        path: tests/_output/
+      - name: Cache PHPUnit results
+        uses: actions/cache@v2
+        with:
+          path: tests/_output
+          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php-
+
+      - name: Run PHPUnit tests
+        run: vendor/bin/phpunit --coverage-text
+
+      - name: Display test coverage
+        if: success()
+        run: |
+          vendor/bin/phpcoverage
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v2
+        with:
+          name: test-results
+          path: tests/_output
