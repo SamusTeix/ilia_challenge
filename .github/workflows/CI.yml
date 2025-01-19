@@ -12,10 +12,10 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout
 
       - name: Setup PHP
-        uses: shivammathur/setup-php@v2
+        uses: shivammathur/setup-php
         with:
           php-version: '8.2'
           extensions: mbstring, intl
@@ -23,7 +23,7 @@ jobs:
           tools: cs2pr
 
       - name: Cache dependencies
-        uses: actions/cache@v2
+        uses: actions/cache
         with:
           path: vendor
           key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
@@ -37,7 +37,7 @@ jobs:
         run: vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.php
 
       - name: Cache PHPUnit results
-        uses: actions/cache@v2
+        uses: actions/cache
         with:
           path: tests/_output
           key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
