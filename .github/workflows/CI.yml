@@ -42,12 +42,7 @@ jobs:
             ${{ runner.os }}-php-
 
       - name: Run PHPUnit tests
-        run: vendor/bin/phpunit --coverage-text
-
-      - name: Display test coverage
-        if: success()
-        run: |
-          vendor/bin/phpcoverage
+        run: vendor/bin/phpunit
 
       - name: Upload test results
         if: always()
