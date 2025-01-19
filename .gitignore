@@ -1,5 +1,9 @@
 
 ###> symfony/framework-bundle ###
+.env
+.env*
+/.env
+/.env.dev
 /.env.local
 /.env.local.php
 /.env.*.local
@@ -7,4 +11,20 @@
 /public/bundles/
 /var/
 /vendor/
+.go-pear*
 ###< symfony/framework-bundle ###
+
+###> symfony/asset-mapper ###
+/public/assets/
+/assets/vendor/
+###< symfony/asset-mapper ###
+
+###> phpunit/phpunit ###
+/phpunit.xml
+.phpunit.result.cache
+###< phpunit/phpunit ###
+
+###> symfony/phpunit-bridge ###
+.phpunit.result.cache
+/phpunit.xml
+###< symfony/phpunit-bridge ###
